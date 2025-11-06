@@ -9,6 +9,7 @@ This application demonstrates professional React Native architecture patterns in
 ### State Management - Zustand with Persistence
 
 **Why Zustand over Redux?**
+
 - **Simplicity**: Less boilerplate, more intuitive API
 - **TypeScript Support**: Excellent type inference out of the box
 - **Performance**: Selector-based updates prevent unnecessary re-renders
@@ -16,6 +17,7 @@ This application demonstrates professional React Native architecture patterns in
 - **Persistence**: First-class AsyncStorage integration with `zustand/middleware`
 
 **Implementation Pattern:**
+
 ```typescript
 // Store with persistence
 export const useMusicStore = create<MusicStore>()(
@@ -24,7 +26,7 @@ export const useMusicStore = create<MusicStore>()(
       // State and actions
     }),
     {
-      name: 'music-store',
+      name: "music-store",
       storage: createJSONStorage(() => AsyncStorage),
     }
   )
@@ -38,21 +40,24 @@ const setIsPlaying = useMusicStore((s) => s.setIsPlaying);
 ### Audio Implementation - expo-av
 
 **Why expo-av over react-native-track-player?**
+
 - **Expo Go Compatibility**: Works out of the box without custom dev builds
 - **Cross-Platform**: Full support for iOS, Android, and Web
 - **Simpler API**: Easier to implement for this use case
 - **Built-in Features**: Progress tracking, seek, playback controls
 
 **Tradeoffs:**
+
 - react-native-track-player offers better background playback
 - expo-av is simpler and works everywhere without config
 - For this assessment, cross-platform compatibility was prioritized
 
 **Implementation Highlights:**
+
 ```typescript
 export const useMusicPlayer = (): UseMusicPlayerReturn => {
   const soundRef = useRef<Audio.Sound | null>(null);
-  
+
   // Audio setup for iOS silent mode
   useEffect(() => {
     Audio.setAudioModeAsync({
@@ -60,7 +65,7 @@ export const useMusicPlayer = (): UseMusicPlayerReturn => {
       staysActiveInBackground: true,
     });
   }, []);
-  
+
   // Playback status updates
   const onPlaybackStatusUpdate = useCallback((status: AVPlaybackStatus) => {
     if (status.isLoaded) {
@@ -74,12 +79,14 @@ export const useMusicPlayer = (): UseMusicPlayerReturn => {
 ### Component Architecture - Glass Design System
 
 **Design Philosophy:**
+
 - **Consistency**: Reusable glass components with unified design tokens
 - **Accessibility**: Proper color contrast, touch targets, and labels
 - **Performance**: Memoization and optimized renders
 - **Flexibility**: Props-based customization while maintaining design system
 
 **Key Components:**
+
 1. **GlassCard**: Base glass container with blur + gradient
 2. **GlassButton**: Interactive button with haptic feedback
 3. **PointsCounter**: Animated counter with scale effects
@@ -88,6 +95,7 @@ export const useMusicPlayer = (): UseMusicPlayerReturn => {
 ### Business Logic - Custom Hooks
 
 **Separation of Concerns:**
+
 - **Hooks**: Business logic and data orchestration
 - **Components**: Presentation and user interaction
 - **Stores**: State persistence and mutations
@@ -95,18 +103,21 @@ export const useMusicPlayer = (): UseMusicPlayerReturn => {
 **Hook Responsibilities:**
 
 **useMusicPlayer**
+
 - Audio lifecycle management
 - Playback controls (play, pause, seek)
 - Status updates and error handling
 - Platform-specific audio setup
 
 **usePointsCounter**
+
 - Real-time points calculation based on progress
 - Challenge completion detection (95% threshold)
 - Integration with both music and user stores
 - Automatic state sync
 
 **useChallenges**
+
 - Challenge data loading and caching
 - Filtering (active vs completed)
 - Store initialization on mount
@@ -117,6 +128,7 @@ export const useMusicPlayer = (): UseMusicPlayerReturn => {
 ### Glass Design System
 
 **Visual Hierarchy:**
+
 1. **Background**: Dark gradient (#0a0a0a → #1a1a1a)
 2. **Glass Layer**: BlurView with dark tint (intensity: 20)
 3. **Gradient Overlay**: Semi-transparent white gradient
@@ -124,11 +136,13 @@ export const useMusicPlayer = (): UseMusicPlayerReturn => {
 5. **Content**: High contrast text and icons
 
 **Color Palette:**
+
 - Primary: #7553DB (Purple - music/creativity)
 - Secondary: #34CB76 (Green - success/progress)
 - Accent: #FCBE25 (Gold - rewards/points)
 
 **Animation Patterns:**
+
 - Scale animations for point changes
 - Smooth progress bar fills
 - Haptic feedback on interactions
@@ -147,6 +161,7 @@ app/
 ```
 
 **Navigation Decisions:**
+
 - **Tabs**: Easy access to main features (Challenges, Profile)
 - **Modal**: Immersive player experience that overlays tabs
 - **No Headers**: Clean, full-screen design with custom navigation
@@ -186,6 +201,7 @@ app/
 ## 🚀 Performance Optimizations
 
 ### Zustand Selectors
+
 ```typescript
 // ✅ Good: Only re-renders when currentTrack changes
 const currentTrack = useMusicStore((s) => s.currentTrack);
@@ -195,6 +211,7 @@ const store = useMusicStore();
 ```
 
 ### React Memoization
+
 ```typescript
 // Memoized filtered lists
 const activeChallenges = useMemo(() => {
@@ -203,10 +220,11 @@ const activeChallenges = useMemo(() => {
 ```
 
 ### Cleanup Patterns
+
 ```typescript
 useEffect(() => {
   setupAudio();
-  
+
   return () => {
     if (soundRef.current) {
       soundRef.current.unloadAsync(); // Prevent memory leaks
@@ -218,17 +236,19 @@ useEffect(() => {
 ## 🧪 Error Handling
 
 ### Audio Playback Errors
+
 ```typescript
 try {
   const { sound } = await Audio.Sound.createAsync(/* ... */);
   soundRef.current = sound;
 } catch (err) {
-  setError(err instanceof Error ? err.message : 'Playback failed');
+  setError(err instanceof Error ? err.message : "Playback failed");
   setIsPlaying(false);
 }
 ```
 
 ### Graceful Fallbacks
+
 - Loading states during async operations
 - Error messages with retry buttons
 - Empty states for no data scenarios
@@ -237,19 +257,23 @@ try {
 ## 📱 Platform Compatibility
 
 ### Web Considerations
+
 ```typescript
 // Haptics only on mobile
-if (Platform.OS !== 'web') {
+if (Platform.OS !== "web") {
   await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
 }
 
 // Audio mode only on native
-if (Platform.OS !== 'web') {
-  await Audio.setAudioModeAsync({ /* ... */ });
+if (Platform.OS !== "web") {
+  await Audio.setAudioModeAsync({
+    /* ... */
+  });
 }
 ```
 
 ### Cross-Platform Audio
+
 - expo-av works on web via HTML5 Audio API
 - Same codebase for all platforms
 - Progressive enhancement for native features
@@ -257,6 +281,7 @@ if (Platform.OS !== 'web') {
 ## 🎯 Assessment Requirements Coverage
 
 ### ✅ Architecture (40%)
+
 - [x] Zustand stores with selectors and persistence
 - [x] Custom hooks for business logic separation
 - [x] Clean component composition
@@ -265,6 +290,7 @@ if (Platform.OS !== 'web') {
 - [x] Proper lifecycle management
 
 ### ✅ UI/UX (30%)
+
 - [x] Glass design system with blur effects
 - [x] Smooth modal presentations
 - [x] Consistent spacing and typography
@@ -273,6 +299,7 @@ if (Platform.OS !== 'web') {
 - [x] Animated points counter
 
 ### ✅ React Native Proficiency (20%)
+
 - [x] Audio playback with expo-av
 - [x] Expo Router navigation patterns
 - [x] Performance optimizations (selectors, memoization)
@@ -281,6 +308,7 @@ if (Platform.OS !== 'web') {
 - [x] Haptic feedback integration
 
 ### ✅ Code Quality (10%)
+
 - [x] TypeScript strict mode
 - [x] Component reusability
 - [x] Proper cleanup and memory management
@@ -290,6 +318,7 @@ if (Platform.OS !== 'web') {
 ## 🔮 Future Enhancements
 
 ### Advanced Features (Bonus)
+
 1. **Background Playback**: Switch to react-native-track-player
 2. **Audio Visualization**: Add waveform or spectrum display
 3. **Gesture Navigation**: Swipe to dismiss modal
@@ -298,6 +327,7 @@ if (Platform.OS !== 'web') {
 6. **Analytics**: Track listening patterns and engagement
 
 ### Scalability Considerations
+
 1. **API Integration**: Replace mock data with backend
 2. **Pagination**: Virtual scrolling for large challenge lists
 3. **Caching**: React Query for server state management
@@ -307,17 +337,20 @@ if (Platform.OS !== 'web') {
 ## 📊 Testing Strategy
 
 ### Unit Tests
+
 - Hook logic (useMusicPlayer, usePointsCounter)
 - Store actions and selectors
 - Utility functions (time formatting, progress calculation)
 
 ### Integration Tests
+
 - Challenge completion flow
 - Points accumulation accuracy
 - State persistence and hydration
 - Navigation between screens
 
 ### E2E Tests
+
 - Full user journey: browse → play → earn → complete
 - Audio playback scenarios
 - Error recovery flows

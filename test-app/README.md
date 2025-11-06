@@ -1,81 +1,108 @@
-# MusicRewards Test App
+# MusicRewards - React Native Assessment
 
-This is the recommended project structure for the Belong React Native assessment. Use this as your starting point!
+A music rewards app that lets users earn points by listening to music challenges. Built for Belong's React Native Developer interview.
 
-## 🚀 Setup Instructions
+## Features
 
-**📖 See [../SETUP.md](../SETUP.md) for complete setup instructions**
+- Stream music challenges and earn points
+- Real-time progress tracking while listening
+- Challenge completion system (90% threshold)
+- User profile with earned points and stats
+- Persistent data storage (survives app restart)
+- Glass UI design with Belong's color scheme
 
-This test-app folder contains the complete starter code structure for your MusicRewards implementation. Don't run setup commands from here - follow the main setup guide above.
+## Technologies Used
 
-**Quick Reference:**
-```bash
-# From the parent react-native/ folder:
-cp -r test-app ~/MusicRewards
-cd ~/MusicRewards
-npx create-expo-app . --template typescript
-npm install
-npx expo start
-```
+- **React Native** with Expo
+- **Expo Router** for navigation
+- **Expo AV** for audio playback
+- **Zustand** for state management
+- **AsyncStorage** for data persistence
+- **TypeScript** for type safety
 
-## 📁 Project Structure
+## Setup and Installation
 
-This structure follows Belong's mobile app architecture patterns:
+### Prerequisites
 
-```
+- Node.js installed
+- Expo Go app on your phone
+
+### Steps
+
+1. Clone or download this project
+2. Navigate to the project folder:
+   ```bash
+   cd test-app
+   ```
+3. Install dependencies:
+   ```bash
+   npm install
+   ```
+4. Start the development server:
+   ```bash
+   npm start
+   ```
+5. Scan the QR code with Expo Go app
+
+## How to Use
+
+1. **Challenges Tab**: Browse available music challenges
+2. **Tap "Play Challenge"**: Opens the audio player modal
+3. **Listen to earn points**: Progress bar shows listening progress
+4. **Complete challenges**: Reach 90% to earn full points
+5. **Profile Tab**: View your earned points and achievements
+
+## Architecture Decisions
+
 src/
-├── app/                    # Expo Router pages
-│   ├── (tabs)/
-│   │   ├── index.tsx       # Home screen with challenge list
-│   │   ├── profile.tsx     # Profile with user progress
-│   │   └── _layout.tsx     # Tab navigation setup
-│   ├── (modals)/
-│   │   ├── player.tsx      # Full-screen audio player
-│   │   └── _layout.tsx     # Modal navigation setup
-│   └── _layout.tsx         # Root layout
+├── app/ # Expo Router pages
+│ ├── (tabs)/
+│ │ ├── index.tsx # Home screen with challenge list
+│ │ ├── profile.tsx # Profile with user progress
+│ │ └── \_layout.tsx # Tab navigation setup
+│ ├── (modals)/
+│ │ ├── player.tsx # Full-screen audio player
+│ │ └── \_layout.tsx # Modal navigation setup
+│ └── \_layout.tsx # Root layout
 ├── components/
-│   ├── ui/                 # Glass design system components
-│   │   ├── GlassCard.tsx
-│   │   ├── GlassButton.tsx
-│   │   └── PointsCounter.tsx
-│   └── challenge/          # Challenge-specific components
-│       ├── ChallengeCard.tsx
-│       └── ChallengeList.tsx
-├── hooks/                  # Business logic hooks
-│   ├── useMusicPlayer.ts
-│   ├── usePointsCounter.ts
-│   └── useChallenges.ts
-├── stores/                 # Zustand stores
-│   ├── musicStore.ts
-│   └── userStore.ts
-├── services/               # External services
-│   └── audioService.ts
-├── constants/              # Theme and configuration
-│   └── theme.ts
-└── types/                  # TypeScript definitions
-    └── index.ts
+│ ├── ui/ # Glass design system components
+│ │ ├── GlassCard.tsx
+│ │ ├── GlassButton.tsx
+│ │ └── PointsCounter.tsx
+│ └── challenge/ # Challenge-specific components
+│ ├── ChallengeCard.tsx
+│ └── ChallengeList.tsx
+├── hooks/ # Business logic hooks
+│ ├── useMusicPlayer.ts
+│ ├── usePointsCounter.ts
+│ └── useChallenges.ts
+├── stores/ # Zustand stores
+│ ├── musicStore.ts
+│ └── userStore.ts
+├── services/ # External services
+│ └── audioService.ts
+├── constants/ # Theme and configuration
+│ └── theme.ts
+└── types/ # TypeScript definitions
+└── index.ts
+
 ```
 
-## 🎵 Audio Files
+See [ARCHITECTURE.md](./ARCHITECTURE.md) for detailed technical decisions and implementation details.
 
-The assessment uses these pre-hosted tracks:
-- **Track 1:** Camo & Krooked - All Night (3:39, 150 points)
-- **Track 2:** Roni Size - New Forms (7:44, 300 points)
+## Demo
 
-URLs and sample data are in [`../assets/audio/README.md`](../assets/audio/README.md)
+The app includes two sample music challenges:
 
-## 🎯 Implementation Order
+- **"All Night" by Camo & Krooked** (150 points, 3:39)
+- **"New Forms" by Roni Size** (300 points, 7:44)
 
-1. **Set up basic navigation structure**
-2. **Create Zustand stores (musicStore.ts, userStore.ts)**
-3. **Build glass design components (GlassCard, GlassButton)**
-4. **Implement useMusicPlayer hook with TrackPlayer**
-5. **Create challenge list and player modal UI**
-6. **Add points counter and progress tracking**
-7. **Test on both platforms and add error handling**
+## Platform testing
 
-## 📖 Reference
+This app was tested on an Android device using Expo Go - npm start.
+iOS testing was not performed due to lack device access.
 
-See the main [README.md](../README.md) for detailed technical requirements and evaluation criteria.
+## Demo video
 
-Good luck! 🚀🎵
+A full walkthrough of the app is included in demo-video.mp4 in this repository. The video shows setup, navigation, audio playback, points earning
+```
